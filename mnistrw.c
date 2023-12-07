@@ -13,8 +13,8 @@ int read_labels(char* file_path, char **labels){
 
 	*labels = malloc(buffer_blocks * buffer_block_size);
 
-	int first_8_bytes;
-	fread(&first_8_bytes, 8, 1, file);
+	char first_8_bytes[8];;
+	fread(first_8_bytes, 8, 1, file);
 	int buffer_size = 2048;
 	char buffer[buffer_size];
 	int bytes_read;
@@ -37,13 +37,6 @@ int read_labels(char* file_path, char **labels){
 	}
 	fclose(file);
 
-	printf("\n\n");
-	int const char_zero_ascii = 48;
-	for(int i = 0; i < next_free_position; i++){
-		char c = (*labels)[i]+char_zero_ascii;
-		printf("%c", c);
-	}
-	printf("\n\n");
 	return next_free_position;
 }
 
@@ -54,9 +47,9 @@ int read_images(char* file_path, char **images){
 
 	*images = malloc(buffer_blocks * buffer_block_size);
 
-	int first_16_bytes;
-	fread(&first_16_bytes, 16, 1, file);
-	int buffer_size = 2048;
+	char first_16_bytes[16];
+	fread(first_16_bytes, 16, 1, file);
+	int buffer_size = 28*28*1000;
 	char buffer[buffer_size];
 	int bytes_read;
 	int quantity_of_buffers_to_read = 1;
@@ -78,13 +71,6 @@ int read_images(char* file_path, char **images){
 	}
 	fclose(file);
 
-	printf("\n\n");
-	int const char_zero_ascii = 48;
-	for(int i = 0; i < next_free_position; i++){
-		char c = (*images)[i]+char_zero_ascii;
-		printf("%c", c);
-	}
-	printf("\n\n");
 	return next_free_position;
 }
 
@@ -98,18 +84,28 @@ void main(){
 	char* train_labels_file_path = "resource/mnist-dataset-binary/train-labels.idx1-ubyte";
 	char* train_images_file_path = "resource/mnist-dataset-binary/train-images.idx3-ubyte";
 
-	char char_zero = '0';
-	int int_zero = 0;
-	char *labels_address_initializer = &char_zero;
-	int *labels_size_address_initializer = &int_zero;
+	char char_zero_1 = '0';
+	char *labels_address_initializer = &char_zero_1;
 	char **labels;
-	int **labels_size;
 	
 	labels = &labels_address_initializer;
-	labels_size = &labels_size_address_initializer;
 
 	int test_labels_size = read_labels(test_labels_file_path, labels);
 	int train_labels_size = read_labels(train_labels_file_path, labels);
+	printf("\n\ntest_labels_size:%d\ntrain_labels_size:%d", test_labels_size, train_labels_size);
+
+
+
+	char char_zero_2 = '0';
+	char *images_address_initializer = &char_zero_2;
+	char **images;
+	
+	images = &images_address_initializer;
+
+	int test_images_size = read_images(test_images_file_path, images);
+	int train_images_size = read_images(train_images_file_path, images);
+	printf("\ntest_images_size:%d\ntrain_images_size:%d\n\n", test_images_size, train_images_size);
+
 
 }
  
