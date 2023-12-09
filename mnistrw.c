@@ -1,10 +1,43 @@
 #include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <math.h>
+
 
 //https://www.geeksforgeeks.org/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/
 
 int read_labels(char* file_path, char **labels);
 int read_images(char* file_path, char **images);
+void create_images(char *name, int name_size, char *labels, int labels_size, char *images);
+
+char* create_file_name(char *name, int name_size, int label, int occurrence);
+
+
+char* create_file_name(char *name, int name_size, int label, int occurrence){
+	int const CHAR_ZERO = 48;
+	char *file_name = malloc(17);
+	char label_char = CHAR_ZERO + (char)label;
+
+	sprintf(file_name,"%s-%05d-%c.bmp", name, occurrence, label_char);
+
+	return file_name;
+}
+
+
+void create_images(char *name, int name_size, char *labels, int labels_size, char *images){
+	char *output_path = "./output";
+	mkdir(output_path, 0771);
+	char const char_zero = 48;
+
+	for(int i = 0; i < labels_size; i++){
+		int label = (int)*(labels + i);
+		char *file_name = create_file_name(name, name_size, label, i+1);
+
+		printf("\n%d - %s", label, file_name);
+	}
+}
+
 
 int read_labels(char* file_path, char **labels){
 	FILE *file = fopen(file_path, "rb");
@@ -90,22 +123,24 @@ void main(){
 	
 	labels = &labels_address_initializer;
 
-	int test_labels_size = read_labels(test_labels_file_path, labels);
-	int train_labels_size = read_labels(train_labels_file_path, labels);
-	printf("\n\ntest_labels_size:%d\ntrain_labels_size:%d", test_labels_size, train_labels_size);
-
-
-
 	char char_zero_2 = '0';
 	char *images_address_initializer = &char_zero_2;
 	char **images;
 	
 	images = &images_address_initializer;
 
-	int test_images_size = read_images(test_images_file_path, images);
-	int train_images_size = read_images(train_images_file_path, images);
-	printf("\ntest_images_size:%d\ntrain_images_size:%d\n\n", test_images_size, train_images_size);
 
+	int test_labels_size = read_labels(test_labels_file_path, labels);
+	int test_images_size = read_images(test_images_file_path, images);
+
+	char *test_name = "test";
+	create_images(test_name, 4, *labels, test_labels_size, *images);
+
+	int train_labels_size = read_labels(train_labels_file_path, labels);
+	int train_images_size = read_images(train_images_file_path, images);
+
+	char *train_name = "train";
+	create_images(train_name, 5, *labels, train_labels_size, *images);
 
 }
  
