@@ -140,18 +140,11 @@ void main(){
 	char* train_labels_file_path = "resource/mnist-dataset-binary/train-labels.idx1-ubyte";
 	char* train_images_file_path = "resource/mnist-dataset-binary/train-images.idx3-ubyte";
 
-	char char_zero_1 = '0';
-	char *labels_address_initializer = &char_zero_1;
-	char **labels;
+	char *labels_address_initializer = NULL;
+	char **labels = &labels_address_initializer;
 	
-	labels = &labels_address_initializer;
-
-	char char_zero_2 = '0';
-	char *images_address_initializer = &char_zero_2;
-	char **images;
-	
-	images = &images_address_initializer;
-
+	char *images_address_initializer = NULL;
+	char **images = &images_address_initializer;
 
 	char *output_dir = "./output";
 
