@@ -7,12 +7,6 @@
 
 //https://www.geeksforgeeks.org/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/
 
-int read_labels(char* file_path, char **labels);
-int read_images(char* file_path, char **images);
-void create_images(char *output_dir, char *name, int name_size, char *labels, int labels_size, char *images);
-
-char* create_file_name(char *output_dir, char *name, int name_size, int label, int occurrence);
-
 
 char* create_file_name(char *output_dir, char *name, int name_size, int label, int occurrence){
 	int const CHAR_ZERO = 48;
@@ -45,7 +39,7 @@ void create_images(char *output_dir, char *name, int name_size, char *labels, in
 		for(int j = 0; j < SIZE; j++){
 			int index = i * SIZE + j;
 			unsigned char value = images[index];
-			// struct rgb_data *pixel = pixels + j; //Desse jeito a imagem fica de ponta cabeça, temos que inverter.
+			// struct rgb_data *pixel = pixels + j; //This way the image would be up side down, so, we need to invert it.
 			
 			int col = j % WIDTH;
 			int row = (j - col)/28;
@@ -131,8 +125,6 @@ int read_images(char* file_path, char **images){
 
 	return next_free_position;
 }
-
-
 
 void main(){
 	char* test_labels_file_path = "resource/mnist-dataset-binary/t10k-labels.idx1-ubyte";
